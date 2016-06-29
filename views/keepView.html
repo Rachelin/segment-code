@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>悬浮</title>
+    <style>
+        #box1 {
+            width: 300px;
+            height: 300px;
+            border: 1px solid;
+            overflow: auto;
+        }
+        .box1-head {
+            width: 600px;
+            position: relative;
+        }
+        .item {
+            width: 200px;
+            height: 100%;
+            text-align: center;
+            float: left;
+            height: 50px;
+            border-bottom: 1px solid;
+        }
+        .content {
+            width: 600px;
+            height: 900px;
+        }
+        .color1 {
+            background-color: #e6baba;
+        }
+        .color2 {
+            background-color: #bae6d8;
+        }
+        .color3 {
+            background-color: #dde6ba;
+        }
+
+        #box2 {
+            width: 300px;
+            height: 100%;
+            border: 1px solid;
+        }
+        .box2-head {
+            height: 50px;
+            width: 300px;
+        }
+
+        .content p {
+            height: 30px;
+            margin-top: 10px; 
+        }
+
+    </style>
+</head>
+<body>
+    <div class="title"><p>我想让头部一直能悬浮在最上面，并且可以保证左右滚动</p></div>
+    <div id="box1">
+        <div class="table">
+            <div class="box1-head">
+                <div class="item color1">1月12号</div>
+                <div class="item color2">1月13号</div>
+                <div class="item color3">1月14号</div>
+            </div>
+            <div class="content">
+                <div class="item color2">1</div>
+                <div class="item color1">2</div>
+                <div class="item color3">3</div>
+                <div class="item color3">11</div>
+                <div class="item color1">12</div>
+                <div class="item color1">13</div>
+                <div class="item color1">21</div>
+                <div class="item">22</div>
+                <div class="item color3">23</div>
+                <div class="item">31</div>
+                <div class="item">32</div>
+                <div class="item color1">33</div>
+                <div class="item">41</div>
+                <div class="item color3">42</div>
+                <div class="item color1">43</div>
+                <div class="item">51</div>
+                <div class="item color1">52</div>
+                <div class="item">53</div>
+                <div class="item color3">61</div>
+                <div class="item color3">62</div>
+                <div class="item">63</div>
+                <div class="item color1">71</div>
+                <div class="item color3">72</div>
+                <div class="item">73</div>
+                <div class="item color1">81</div>
+                <div class="item color3">82</div>
+                <div class="item color1">83</div>
+                <div class="item color3">1</div>
+                <div class="item color1">2</div>
+                <div class="item color3">3</div>
+                <div class="item color3">1</div>
+                <div class="item">2</div>
+                <div class="item color1">3</div>
+                <div class="item color3">1</div>
+                <div class="item color3">2</div>
+                <div class="item color3">3</div>
+                <div class="item color1">1</div>
+                <div class="item color3">2</div>
+                <div class="item color3">3</div>
+                <div class="item color1">1</div>
+                <div class="item color3">2</div>
+                <div class="item color3">3</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="title"><p>我想让box头部遇到浏览器边框后停浮在最上，页面回滚后又能恢复位置</p></div>
+
+    <div id="box2">
+        <div class="color1 box2-head">TITLE</div>
+        <div class="content">
+            <p>这是是内容</p>
+        </div>
+    </div>
+
+    <script src="../lib/jquery-3.0.0.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            // box1
+            $('#box1').scroll(function(e) {
+                var varscroll = parseInt($(this).scrollTop());
+                $(this).find('.box1-head').css("top", varscroll+'px');
+            });
+
+            // box2
+            var $menu = $('#box2').find('.box2-head'),
+                vartop = $menu.offset().top,
+                stickyHeight = parseInt($menu.height()),
+                stickyMarginB = parseInt($menu.css('margin-bottom')),
+                currentMarginT = parseInt($menu.next().closest('div').css('margin-top'));
+
+            console.log("当前标签的距离文档顶部的值：vartop = ", vartop);
+            console.log("当前标签高度：stickyHeight = ", stickyHeight);
+            console.log("当前标签的向下间隙值：stickyMarginB = ", stickyMarginB);
+            console.log("当前标签的第一个子标签的顶部距离：currentMarginT = ", currentMarginT);
+
+            $(document).on('scroll', function() {
+                var varscroll = parseInt($(document).scrollTop());
+                if(vartop < varscroll){
+                    $menu.next().closest('div').css({
+                        'margin-top': stickyHeight + stickyMarginB + currentMarginT + 'px'
+                    }, 10);// 重点
+                    $menu.css("position","fixed");
+                    $menu.css({
+                        top: '0px'
+                    }, 100, function(){ });
+                }
+     
+                if(varscroll < vartop){
+                    $menu.css("position","relative");
+                    $menu.next().closest('div').css({
+                        'margin-top': currentMarginT + 'px'
+                    }, 10);// 重点
+                }
+            });
+        });
+    </script>
+</body>
+</html>
